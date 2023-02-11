@@ -19,6 +19,7 @@ class MyAudioHandler extends BaseAudioHandler {
 
   MyAudioHandler() {
     _loadEmptyPlaylist();
+    _notifyAudioHandlerAboutPlaybackEvents();
   }
   Future<void> _loadEmptyPlaylist() async {
     try {
@@ -48,5 +49,33 @@ class MyAudioHandler extends BaseAudioHandler {
   Future<void> play() => _player.play();
   @override
   Future<void> pause() => _player.pause();
+
+  void _notifyAudioHandlerAboutPlaybackEvents() {
+    _player.playbackEventStream.listen((PlaybackEvent event) {
+      final playing = _player.playing;
+      playbackState.add(playbackState.value.copyWith(
+        controls: [
+
+          if (playing) MediaControl.pause else MediaControl.play,
+          MediaControl.stop,
+        ],
+        systemActions: const {
+          MediaAction.seek,
+        },
+        androidCompactActionIndices: const [0, 1],
+        processingState: const {
+          ProcessingState.idle: AudioProcessingState.idle,
+          ProcessingState.loading: AudioProcessingState.loading,
+          ProcessingState.buffering: AudioProcessingState.buffering,
+          ProcessingState.ready: AudioProcessingState.ready,
+          ProcessingState.completed: AudioProcessingState.completed,
+        }[_player.processingState]!,
+        playing: playing,
+        updatePosition: _player.position,
+        bufferedPosition: _player.bufferedPosition,
+        queueIndex: event.currentIndex,
+      ));
+    });
+  }
 
 }
