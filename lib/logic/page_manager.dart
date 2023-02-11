@@ -22,6 +22,7 @@ class PageManager {
     _listenToCurrentPosition();
     _listenToBufferedPosition();
     _listenToTotalDuration();
+    _listenToChangesInSong();
   }
 
   Future<void> _loadPlaylist() async {
@@ -95,6 +96,14 @@ class PageManager {
       );
     });
   }
+
+  void _listenToChangesInSong() {
+    _audioHandler.mediaItem.listen((mediaItem) {
+      currentSongTitleNotifier.value = mediaItem?.title ?? '';
+
+    });
+  }
+
 
 
 
