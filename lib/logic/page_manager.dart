@@ -1,50 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:test_audio/notifiers/play_button_notifier.dart';
+import 'package:test_audio/notifiers/progress_notifier.dart';
+import 'package:test_audio/services/playlist_repository.dart';
 
 class PageManager {
-  final buttonNotifier = ValueNotifier<ButtonState>(ButtonState.paused);
+  // Listeners: Updates going to the UI
+  final currentSongTitleNotifier = ValueNotifier<String>('');
+  final playlistNotifier = ValueNotifier<List<String>>([]);
+  final progressNotifier = ProgressNotifier();
+  final isFirstSongNotifier = ValueNotifier<bool>(true);
+  final playButtonNotifier = PlayButtonNotifier();
+  final isLastSongNotifier = ValueNotifier<bool>(true);
+  final isShuffleModeEnabledNotifier = ValueNotifier<bool>(false);
 
-  static const url = 'https://live.sgpc.net:8443/;nocache=889869audio_file.mp3';
-
-  late AudioPlayer _audioPlayer;
-
-  PageManager(){
-    _init();
-  }
-
-  void _init() async {
-    _audioPlayer = AudioPlayer();
-    await _audioPlayer.setUrl(url);
-
-    _audioPlayer.playerStateStream.listen((playerState) {
-      final isPlaying = playerState.playing;
-      final processingState = playerState.processingState;
-      if (processingState == ProcessingState.loading || processingState == ProcessingState.buffering){
-        buttonNotifier.value = ButtonState.loading;
-      }
-      else if (!isPlaying){
-        buttonNotifier.value = ButtonState.paused;
-      }
-      else {
-        buttonNotifier.value = ButtonState.playing;
-      }
-    });
-  }
-
-  void play(){
-    _audioPlayer.play();
-  }
-
-  void pause(){
-    _audioPlayer.pause();
-  }
-
-  void dispose(){
-    _audioPlayer.dispose();
-  }
-
-}
-
-enum ButtonState {
-  paused, playing, loading
+  // Events: Calls coming from the UI
+  void init() {}
+  void play() {}
+  void pause() {}
+  void seek(Duration position) {}
+  void dispose() {}
 }
