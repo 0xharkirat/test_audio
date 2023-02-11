@@ -95,4 +95,10 @@ class MyAudioHandler extends BaseAudioHandler {
     });
   }
 
+  @override
+  Future<void> stop() async {
+    await _player.dispose();
+    return super.stop();
+  }
+
 }
