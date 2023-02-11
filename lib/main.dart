@@ -6,6 +6,7 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
+
   const MyApp({super.key});
 
   @override
@@ -16,9 +17,9 @@ class _MyAppState extends State<MyApp> {
 
   late final PageManager _pageManager;
 
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _pageManager = PageManager();
   }
@@ -29,8 +30,6 @@ class _MyAppState extends State<MyApp> {
     _pageManager.dispose();
     super.dispose();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
