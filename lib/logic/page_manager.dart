@@ -18,6 +18,7 @@ class PageManager {
   void init() async {
     await _loadPlaylist();
     _listenToChangesInPlaylist();
+    _listenToPlaybackState();
   }
 
   Future<void> _loadPlaylist() async {
@@ -38,6 +39,24 @@ class PageManager {
       if (playlist.isEmpty) return;
       final newList = playlist.map((item) => item.title).toList();
       playlistNotifier.value = newList;
+    });
+  }
+
+  void _listenToPlaybackState() {
+    _audioHandler.playbackState.listen((playbackState) {
+      final isPlaying = playbackState.playing;
+      final processingState = playbackState.processingState;
+      if (processingState == AudioProcessingState.loading ||
+          processingState == AudioProcessingState.buffering) {
+        playButtonNotifier.value = ButtonState.loading;
+      } else if (!isPlaying) {
+        playButtonNotifier.value = ButtonState.paused;
+      } else if (processingState != AudioProcessingState.completed) {
+        playButtonNotifier.value = ButtonState.playing;
+      } else {
+        _audioHandler.seek(Duration.zero);
+        _audioHandler.pause();
+      }
     });
   }
 
