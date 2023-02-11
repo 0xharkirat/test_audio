@@ -19,6 +19,9 @@ class PageManager {
     await _loadPlaylist();
     _listenToChangesInPlaylist();
     _listenToPlaybackState();
+    _listenToCurrentPosition();
+    _listenToBufferedPosition();
+    _listenToTotalDuration();
   }
 
   Future<void> _loadPlaylist() async {
@@ -59,6 +62,40 @@ class PageManager {
       }
     });
   }
+
+  void _listenToCurrentPosition() {
+    AudioService.position.listen((position) {
+      final oldState = progressNotifier.value;
+      progressNotifier.value = ProgressBarState(
+        current: position,
+        buffered: oldState.buffered,
+        total: oldState.total,
+      );
+    });
+  }
+
+  void _listenToBufferedPosition() {
+    _audioHandler.playbackState.listen((playbackState) {
+      final oldState = progressNotifier.value;
+      progressNotifier.value = ProgressBarState(
+        current: oldState.current,
+        buffered: playbackState.bufferedPosition,
+        total: oldState.total,
+      );
+    });
+  }
+
+  void _listenToTotalDuration() {
+    _audioHandler.mediaItem.listen((mediaItem) {
+      final oldState = progressNotifier.value;
+      progressNotifier.value = ProgressBarState(
+        current: oldState.current,
+        buffered: oldState.buffered,
+        total: mediaItem?.duration ?? Duration.zero,
+      );
+    });
+  }
+
 
 
   void play() => _audioHandler.play();
