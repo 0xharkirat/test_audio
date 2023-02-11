@@ -78,4 +78,7 @@ class MyAudioHandler extends BaseAudioHandler {
     });
   }
 
+  @override
+  Future<void> seek(Duration position) => _player.seek(position);
+
 }
