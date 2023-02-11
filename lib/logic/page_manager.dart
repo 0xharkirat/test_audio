@@ -111,6 +111,9 @@ class PageManager {
   void pause() => _audioHandler.pause();
   void seek(Duration position) => _audioHandler.seek(position);
   void dispose() {
+    _audioHandler.customAction('dispose');
+  }
+  void stop() {
     _audioHandler.stop();
   }
 }
