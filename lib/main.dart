@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:test_audio/logic/page_manager.dart';
+import 'package:test_audio/services/audio_handler.dart';
 
-void main() {
+void main() async {
+  await initAudioService();
   runApp(const MyApp());
 }
 
