@@ -27,4 +27,21 @@ class MyAudioHandler extends BaseAudioHandler {
       print("Error: $e");
     }
   }
+
+  @override
+  Future<void> addQueueItems(List<MediaItem> mediaItems) async {
+    // manage Just Audio
+    final audioSource = mediaItems.map(_createAudioSource);
+    _playlist.addAll(audioSource.toList());
+    // notify system
+    final newQueue = queue.value..addAll(mediaItems);
+    queue.add(newQueue);
+  }
+  UriAudioSource _createAudioSource(MediaItem mediaItem) {
+    return AudioSource.uri(
+      Uri.parse(mediaItem.extras!['url']),
+      tag: mediaItem,
+    );
+  }
+
 }
