@@ -23,7 +23,6 @@ class DemoPlaylist extends PlaylistRepository {
     return {
       'id': _songIndex.toString().padLeft(3, '0'),
       'title': 'Song $_songIndex',
-      'album': 'SoundHelix',
       'url':
       'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-$_songIndex.mp3',
     };
