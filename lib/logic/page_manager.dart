@@ -42,8 +42,8 @@ class PageManager {
   }
 
 
-  void play() {}
-  void pause() {}
+  void play() => _audioHandler.play();
+  void pause() => _audioHandler.pause();
   void seek(Duration position) {}
   void dispose() {}
 }

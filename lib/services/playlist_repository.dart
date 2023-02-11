@@ -17,7 +17,7 @@ class DemoPlaylist extends PlaylistRepository {
 
   var _songIndex = 0;
   static const _maxSongNumber = 16;
-  
+
  // Todo: Url for songs here
   Map<String, String> _nextSong() {
     _songIndex = (_songIndex % _maxSongNumber) + 1;

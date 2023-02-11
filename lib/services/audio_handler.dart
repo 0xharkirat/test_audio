@@ -44,4 +44,9 @@ class MyAudioHandler extends BaseAudioHandler {
     );
   }
 
+  @override
+  Future<void> play() => _player.play();
+  @override
+  Future<void> pause() => _player.pause();
+
 }
